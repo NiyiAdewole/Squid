@@ -17,5 +17,17 @@
         <br><br>
         <input type="submit" value="Generate Schema">
     </form>
+
+    {% if schema %}
+        <h2>Schema generated successfully!</h2>
+        <form action="{{ url_for('web.download_schema') }}" method="post">
+            <input type="hidden" name="schema" value="{{ schema|tojson }}">
+            <input type="submit" value="Download JSON Schema">
+        </form>
+        <form action="{{ url_for('web.analyze_schema') }}" method="post">
+            <input type="hidden" name="schema" value="{{ schema|tojson }}">
+            <input type="submit" value="Analyze Schema">
+        </form>
+    {% endif %}
 </body>
 </html>
