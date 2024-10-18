@@ -1,0 +1,6 @@
+/__pycache__
+/schema_generator.egg-info
+/venv
+*.xlsx
+*.csv
+*.json

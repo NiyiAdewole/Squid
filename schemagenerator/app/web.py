@@ -1,12 +1,12 @@
-from flask import Flask, render_template, request, send_file
+from flask import Blueprint, render_template, request, send_file
 from .core import process_excel_to_schema
 import tempfile
 import os
 import json
 
-app = Flask(__name__, template_folder='../templates', static_folder='../static')
+web = Blueprint('web', __name__)
 
-@app.route('/', methods=['GET', 'POST'])
+@web.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -36,7 +36,7 @@ def index():
     return render_template('index.html')
 
 def run_web():
-    app.run(debug=True)
+    web.run(debug=True)
 
 if __name__ == '__main__':
     run_web()
