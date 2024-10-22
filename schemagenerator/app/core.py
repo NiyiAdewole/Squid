@@ -1,27 +1,39 @@
 import pandas as pd
 from typing import Dict, List, Optional
+import json
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 def read_excel(file_path: str) -> pd.DataFrame:
     return pd.read_excel(file_path)
 
 def generate_schema(df: pd.DataFrame, column_mapping: Optional[Dict[str, str]] = None) -> List[Dict[str, str]]:
-    schema = []
+    records = []
     columns = df.columns
+    # column_list = columns.to_dict()
+    logger.warning('Running generate_schema for schema of %s \n', df)
+    column_list = df.columns.to_list()
+    logger.warning('Columns are %s \n', column_list)
 
     for _, row in df.iterrows():
-        schema_item = {}
+        record = {}
         for col in columns:
             field_name = column_mapping.get(col, col) if column_mapping else col
-            schema_item[field_name] = str(row[col]) if pd.notna(row[col]) else ""
-        schema.append(schema_item)
-    
-    return schema
+            record[field_name] = str(row[col]) if pd.notna(row[col]) else ""
+        records.append(record)
 
-def schema_to_json(schema: List[Dict[str, str]]) -> str:
-    import json
-    return json.dumps(schema, indent=2)
+    data = {
+        'columns':column_list, 
+        'records':records
+    }
+    
+    return data
 
 def process_excel_to_schema(file_path: str, column_mapping: Optional[Dict[str, str]] = None) -> str:
+    logger.warning('Running process_excel_to_schema for  %s', file_path)
     df = read_excel(file_path)
-    schema = generate_schema(df, column_mapping)
-    return schema_to_json(schema)
+    data = generate_schema(df, column_mapping)
+    logger.warning('\n Schema generation returned:-  %s', data)
+    return data
