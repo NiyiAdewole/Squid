@@ -1,31 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schema Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Schema Generator</h1>
-    <form action="{{ url_for('web.upload_file') }}" method="post" enctype="multipart/form-data">
-        <label for="file">Excel File:</label>
-        <input type="file" name="file" id="file" accept=".xlsx,.csv"><br>
-        <label for="mapping">Column Mapping (optional):</label>
-        <input type="file" name="mapping" id="mapping" accept=".json"><br>
-        <input type="submit" value="Generate Schema">
-    </form>
+{% extends 'layout.html' %}
 
-    {% if schema %}
-        <h2>Schema generated successfully!</h2>
-        <form action="{{ url_for('web.download_schema') }}" method="post">
-            <input type="hidden" name="schema" value="{{ schema|tojson }}">
-            <input type="submit" value="Download JSON Schema">
-        </form>
-        <form action="{{ url_for('web.analyze_schema') }}" method="post">
-            <input type="hidden" name="schema" value="{{ schema }}">
-            <input type="submit" value="Analyze Schema">
-        </form>
-    {% endif %}
-</body>
-</html>
+{% set active_page = "Home" %}
+{% block title %}Schema Generator Module{% endblock %}
+{% block content %}
+    {% include 'upload.html' %}
+    <!-- Put your data preview here -->
+{% endblock %}

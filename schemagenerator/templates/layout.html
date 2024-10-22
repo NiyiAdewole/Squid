@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schema Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+</head>
+<body class="md:container mx-auto">
+    {% include 'shared/partials/header.html' %}
+    <div class="container">
+        <h1 class="text-2xl font-bold text-center ">{% block title %}Squid: Schema Generator{% endblock %}</h1>
+        {% block content %}
+        <p>Welcome to squid our internal data exploration tool. This is the shcema genetator module. It allows you to upload a data file and examine the schema.</p>
+        <!-- add a preview container here to help with visualizing schema settings -->
+        {% endblock %}
+    </div>
+    <div class="footer">
+        {% include 'shared/partials/footer.html' %}
+    </div>
+</body>
+
+</html>

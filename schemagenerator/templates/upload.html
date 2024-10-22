@@ -1,21 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Squid:Upload Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h2>Upload the source document here</h2>
-    <form method="post" enctype="multipart/form-data">
-        <label for="file">Excel File:</label>
-        <input type="file" name="file" id="file" accept=".xlsx" required>
-        <br><br>
-        <label for="mapping">Column Mapping (optional):</label>
-        <input type="file" name="mapping" id="mapping" accept=".json">
-        <br><br>
-        <input type="submit" value="Generate Schema">
-    </form>
-</body>
-</html>
+<h2>Upload the source document here</h2>    
+<form action="{{ url_for('web.upload_file') }}" method="post" enctype="multipart/form-data">
+    <label for="file">Excel File:</label>
+    <input type="file" name="file" id="file" accept=".xlsx,.csv"><br>
+    <label for="mapping">Column Mapping (optional):</label>
+    <input type="file" name="mapping" id="mapping" accept=".json"><br>
+    <input class="button p-4 bg-emerald-900 cursor-pointer rounded font-bold text-white" type="submit" value="Generate Schema">
+</form>
+
+{% if data %}
+    <div class="mt-4">
+        <h2 class="h2 text-xl font-bold text-emerald-900">Schema generated successfully!</h2>
+        <fieldset class="flex justify-between">
+            <form action="{{ url_for('web.analyze_schema') }}" method="post">
+                <input type="hidden" name="filedata" value="{{ data }}">
+                <input class="button p-4 bg-indigo-700 cursor-pointer rounded font-bold text-white" type="submit" value="Analyze Schema">
+            </form>
+            <form action="{{ url_for('web.download_schema') }}" method="post">
+                <input type="hidden" name="filedata" value="{{ data|tojson }}">
+                <input class="button p-4 bg-sky-700 cursor-pointer rounded font-bold text-white" type="submit" value="Download JSON Data">
+            </form>    
+        </fieldset>
+    </div>
+{% endif %}

@@ -1,21 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schema Analysis</title>
-</head>
-<body>
-    <h1>Analysis Table</h1>
-    <p>We will ideally implement lots of filters and modification actions on this table.</p>
-    <table>
-        <thead>
-            <th>Let</th>
-            <th>Us</th>
-            <th>Proceed</th>
-        </thead>
-        <tbody></tbody>
-        <tfoot></tfoot>
-    </table>
-</body>
-</html>
+{% extends 'layout.html' %}
+
+{% set active_page = "Analysis" %}
+{% block title %}Schema Analysis{% endblock %}
+{% block content %}
+<!-- {{analysis}} -->
+<div class="dataView p-4 my-4">
+    <div class="">
+        <h2 class="text-xl font-bold text-center my-4">Analysis Table</h2>
+        <p class="text-center">We will ideally implement lots of filters and modification actions on this table.</p><br>
+    </div>
+    <div class="flex justify-center">
+        <table class="table-auto border-collapse border border-slate-500">
+            <thead>
+                <tr>
+                    {% for column in analysis.columns %}
+                        <th class="p-2 border border-slate-500">{{ column }}</th>
+                    {% endfor %}
+                </tr>        
+            </thead>
+            <tbody>
+                {% for record in analysis.records %}
+                    <tr>
+                    {% for prop, value in record.items() %}
+                        <td class="p-2 border border-slate-500">{{ value }}</td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+<br><br>
+{% endblock %}

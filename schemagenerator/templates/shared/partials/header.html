@@ -1,0 +1,21 @@
+<header class="">
+  <nav class="flex justify-end mx-auto w-full">
+    <ul class="nav flex md:inline-flex p-4">
+      <li class="nav-item flex font-bold mx-2 bg-emerald-400 hover:bg-emerald-900 hover:text-white {{'bg-emerald-900 text-white' if active_page =='Home'}} rounded {{ 'active' if active_page == 'Home' }}">
+        <a class="font-bold py-4 px-4" href='/'>
+          Home
+        </a>
+      </li>
+      <li class="nav-item flex font-bold mx-2 bg-emerald-400 hover:bg-emerald-900 hover:text-white {{'bg-emerald-900 text-white' if active_page =='Analysis'}} rounded" active=True>
+        <a class="font-bold py-4 px-4" href='/analyze'>
+          Analyze
+        </a>
+      </li>
+      <li class="nav-item flex font-bold mx-2 bg-emerald-400 hover:bg-emerald-900 hover:text-white {{'bg-emerald-900 text-white' if active_page =='Config'}} rounded">
+        <a class="font-bold py-4 px-4" href='#' aria-disabled="true" disabled>
+          Config
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
