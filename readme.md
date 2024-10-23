@@ -28,6 +28,7 @@ schema_generator 'path_to_file'
 - Read data from csv and excel source
 - Create source data schema and describe using objects
 - Create rudimentary transform schema allowing modification to source columns
+- Generate fake data to fit a schema
 
 ## Web Interface
 Serve a visual inteface of different features and functions to display source and destination information

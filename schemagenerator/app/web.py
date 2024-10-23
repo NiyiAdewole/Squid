@@ -26,19 +26,23 @@ def upload_file():
         # Process the file and generate the schema
         logger.info(f'\n\n Processing file, stepping into core now : {file.filename}')
         data = process_excel_to_schema(file)
+        # data =  json.dumps(data)
         logger.debug(f'\n\n Exited core | Generate schema: {type(data)}')
-        data =  json.dumps(data)
         # Store file name and schema in session for later use
         session['filename'] =  file.filename
         # session['columns'] = json.dump(data.columns)
     
-        logger.debug(f'\n\n UN_Converted data: ', {data})
-        session['columns'] = data.find('columns')
+        session['columns'] = data['columns']
         session['filedata'] = data
-        logger.info('Schema stored in session')
+        logger.info('Uploaded file stored in session')
+
+        # Describe data schema
+        # Get info, number of rows types for each column etc
+        
         return render_template('index.html', data=data)
         # _, temp_path = tempfile.mkstemp(suffix='.xlsx')
         # file.save(temp_path)
+
 
 @web.route('/download', methods=['POST'])
 def download_schema():
@@ -74,23 +78,14 @@ def analyze_schema():
         # Try to parse the JSON string
         try:
             logger.info('Try to parse the JSON string')
-            data_json = json.loads(data)
-            logger.info('Successfully parsed schema JSON')
+            data_json = json.dumps(data)
+            logger.info('Successfully parsed schema JSON', data_json)
         except json.JSONDecodeError:
             logger.error(f'Failed to parse schema JSON: {e}')
             return "Invalid schema format in session", 400
         
-        # Display details
-        # analysis = schema
-
-        #  Perform analysis on the schema (Might need to make this a data frame)
-        # analysis = {
-        #     'num_fields': len(schema),
-        #     'data_types': list(set(type(value).__name__ for value in schema.values())),
-        #     # Add more analysis as needed
-        # }
-        logger.info(f'Completed schema analysis: {data} \n\n Data: {data_json}')
-        return render_template('analysis.html', title='analyze this', analysis=data_json, data=data)
+        logger.info(f'Completed schema analysis: {data}')
+        return render_template('analysis.html', title='analyze this', analysis=data, data=data)
     except Exception as e:
         print(f"Error analyzing schema: {e}")
         return "Internal Server Error", 500

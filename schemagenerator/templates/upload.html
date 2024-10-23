@@ -4,12 +4,14 @@
     <input type="file" name="file" id="file" accept=".xlsx,.csv"><br>
     <label for="mapping">Column Mapping (optional):</label>
     <input type="file" name="mapping" id="mapping" accept=".json"><br>
-    <input class="button p-4 bg-emerald-900 cursor-pointer rounded font-bold text-white" type="submit" value="Generate Schema">
+    <input class="button p-4 bg-emerald-900 cursor-pointer rounded font-bold text-white" type="submit" value="Extract Data">
 </form>
 
 {% if data %}
+{{data.info}}
     <div class="mt-4">
-        <h2 class="h2 text-xl font-bold text-emerald-900">Schema generated successfully!</h2>
+        {{data.columns}}
+        <h2 class="h2 text-xl font-bold text-emerald-900">Data extracted successfully!</h2>
         <fieldset class="flex justify-between">
             <form action="{{ url_for('web.analyze_schema') }}" method="post">
                 <input type="hidden" name="filedata" value="{{ data }}">

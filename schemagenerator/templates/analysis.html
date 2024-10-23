@@ -8,6 +8,7 @@
         <h2 class="text-xl font-bold text-center my-4">Analysis Table</h2>
         <p class="text-center">We will ideally implement lots of filters and modification actions on this table.</p><br>
     </div>
+    {{data['info']}}
     <div class="flex justify-center">
         <table id="myTable" class="table-auto border-collapse border border-slate-500 stripe hover">
             <thead>
@@ -27,6 +28,30 @@
                 {% endfor %}
             </tbody>
             <tfoot></tfoot>
+        </table>
+    </div>
+    <br><br>
+    <div class="flex w-100">
+        <table class="table-auto border-collapse border border-slate-500 stripe hover">
+            <thead>
+                <tr>
+                    {% for property in data['info'] %}
+                        {% for column in data['info'][property].keys %}
+                            <th>{{column}}</th>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>                
+            </thead>
+            <tbody>
+                {% for property in data['info'] %}
+                <tr>
+                    <th>{{property}}</th>
+                    {% for quality, value in data['info'][property].items() %}
+                    <td>{{quality}} {{value}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 </div>
