@@ -4,19 +4,22 @@
 {% block title %}Schema Analysis{% endblock %}
 {% block content %}
 <div class="dataView p-4 my-4">
-    <div class="">
-        <h2 class="text-xl font-bold text-center my-4">Analysis Table</h2>
-        <p class="text-center">We will ideally implement lots of filters and modification actions on this table.</p><br>
-    </div>
-    {{data['info']}}
-    <div class="flex justify-center">
-        <table id="myTable" class="table-auto border-collapse border border-slate-500 stripe hover">
+    {% if preview %}
+        <div class="preview h-full max-h-[250px] overflow-auto border-2 border-lime-700 p-2">
+            {{preview}}<br>
+            {{analysis.info['Universe']}}<br>
+        </div>        
+    {% endif %}
+    <div class="flex flex-col justify-center my-4">
+        <h2 class="text-xl font-bold text-center my-4">Data Sample</h2>
+        <p class="text-center">Sample from the data source provided</p><br>
+        <table id="myTable" class="data-table table-auto border-collapse border border-slate-500 stripe hover">
             <thead>
                 <tr>
                     {% for column in analysis.columns %}
                         <th class="p-2 border border-slate-500">{{ column }}</th>
                     {% endfor %}
-                </tr>        
+                </tr>
             </thead>
             <tbody>
                 {% for record in analysis.records %}
@@ -30,24 +33,26 @@
             <tfoot></tfoot>
         </table>
     </div>
-    <br><br>
-    <div class="flex w-100">
-        <table class="table-auto border-collapse border border-slate-500 stripe hover">
+    
+    <div class="flex flex-col justify-center mt-4 p-2">
+        <h2 class="text-xl font-bold text-center my-4">Analysis Table</h2>
+        <p class="text-center">We will ideally implement lots of filters and modification actions on this table.</p><br>
+        <table class="data-table table-auto border-collapse rounded border-2 border-slate-500 border-purple-700 stripe hover">
+            {% set qualities = analysis.info['Universe'].keys() %}
             <thead>
                 <tr>
-                    {% for property in data['info'] %}
-                        {% for column in data['info'][property].keys %}
-                            <th>{{column}}</th>
-                        {% endfor %}
+                    <th>*-*</th>
+                    {% for quality in qualities %}
+                        <th class="p-2 border border-slate-500">{{quality}}</th>
                     {% endfor %}
-                </tr>                
+                </tr>
             </thead>
             <tbody>
-                {% for property in data['info'] %}
+                {% for property in analysis.info %}
                 <tr>
-                    <th>{{property}}</th>
-                    {% for quality, value in data['info'][property].items() %}
-                    <td>{{quality}} {{value}}</td>
+                    <th class="p-2 border border-slate-500"><span>{{property}}</span></th>
+                    {% for name, value in analysis.info[property].items() %}
+                    <td class="p-2 border border-slate-500">{{value}}</td>
                     {% endfor %}
                 </tr>
                 {% endfor %}

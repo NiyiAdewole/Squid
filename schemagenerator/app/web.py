@@ -76,16 +76,16 @@ def analyze_schema():
             return 'No schema available'
         
         # Try to parse the JSON string
+        logger.info('Try to parse the JSON string')
         try:
-            logger.info('Try to parse the JSON string')
-            data_json = json.dumps(data)
-            logger.info('Successfully parsed schema JSON', data_json)
+            data_json = json.dumps(data, indent = 2, sort_keys = True)
+            logger.info('Successfully parsed schema JSON', type(data_json))
         except json.JSONDecodeError:
             logger.error(f'Failed to parse schema JSON: {e}')
             return "Invalid schema format in session", 400
         
         logger.info(f'Completed schema analysis: {data}')
-        return render_template('analysis.html', title='analyze this', analysis=data, data=data)
+        return render_template('analysis.html', title='analyze this', analysis=data, preview=data_json)
     except Exception as e:
         print(f"Error analyzing schema: {e}")
         return "Internal Server Error", 500
