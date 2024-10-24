@@ -7,7 +7,7 @@ html.setAttribute('data-bs-theme', prefers); */
  
 $(document).ready(function(){
     console.log("hit the table.js script");
-    mine = $('#myTable').DataTable();
+    mine = $('.data-table').DataTable();
 });
 
 // let table = new DataTable('#myTable');
