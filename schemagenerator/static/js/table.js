@@ -6,7 +6,7 @@ html.classList.add(prefers);
 html.setAttribute('data-bs-theme', prefers); */
  
 $(document).ready(function(){
-    console.log("hit the table.js script");
+    // console.log("hit the table.js script");
     mine = $('.data-table').DataTable();
 });
 

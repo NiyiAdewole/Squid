@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, request, session, send_file, jsoni
 from .core import process_excel_to_schema
 import json
 import io
+from os import path, walk
 
 web = Blueprint('web', __name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -26,23 +27,13 @@ def upload_file():
         # Process the file and generate the schema
         logger.info(f'\n\n Processing file, stepping into core now : {file.filename}')
         data = process_excel_to_schema(file)
-        # data =  json.dumps(data)
-        logger.debug(f'\n\n Exited core | Generate schema: {type(data)}')
-        # Store file name and schema in session for later use
+        # Store file name and data in session for later use
+        # ToDo: Add a limit to how much of data is sampled for session storage
         session['filename'] =  file.filename
-        # session['columns'] = json.dump(data.columns)
-    
-        session['columns'] = data['columns']
         session['filedata'] = data
-        logger.info('Uploaded file stored in session')
 
-        # Describe data schema
-        # Get info, number of rows types for each column etc
-        
+        # Describe data schema - Get info, number of rows types for each column etc
         return render_template('index.html', data=data)
-        # _, temp_path = tempfile.mkstemp(suffix='.xlsx')
-        # file.save(temp_path)
-
 
 @web.route('/download', methods=['POST'])
 def download_schema():
@@ -69,28 +60,28 @@ def analyze_schema():
     try:
         logger.info('Loading analysis page')
         data = session.get('filedata')
-        # columns = data_json
-        logger.debug(f'Retrieved schema from session: ', data)
+        logger.debug('Retrieving data from session')
         if not data:
-            logger.warning('No schema available in session')
-            return 'No schema available'
+            logger.warning('No data file loaded in session')
+            return 'No data file available'
         
         # Try to parse the JSON string
         logger.info('Try to parse the JSON string')
         try:
             data_json = json.dumps(data, indent = 2, sort_keys = True)
-            logger.info('Successfully parsed schema JSON', type(data_json))
+            logger.debug("Successfully parsed schema JSON")
         except json.JSONDecodeError:
-            logger.error(f'Failed to parse schema JSON: {e}')
+            logger.error('Failed to parse schema JSON: %s', {e})
             return "Invalid schema format in session", 400
         
-        logger.info(f'Completed schema analysis: {data}')
+        logger.info('Quick analysis complete!')
         return render_template('analysis.html', title='analyze this', analysis=data, preview=data_json)
     except Exception as e:
-        print(f"Error analyzing schema: {e}")
+        print('Error analyzing schema: %s', e)
         return "Internal Server Error", 500
 
 def run_web():
+    logger.info("Running web...")
     web.run(debug=True)
 
 if __name__ == '__main__':

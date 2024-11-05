@@ -9,6 +9,9 @@ def create_app():
     app = Flask('__name__', 
                 static_folder='schemagenerator/static', 
                 template_folder='schemagenerator/templates')
+    # app.config.update(
+    #     TEMPLATES_AUTO_RELOAD=True
+    # )
     
     app.secret_key = os.environ.get('SECRET_KEY')
     # Import and register blueprints
