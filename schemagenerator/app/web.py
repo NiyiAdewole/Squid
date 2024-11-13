@@ -4,7 +4,6 @@ from flask import Blueprint, render_template, request, session, send_file, jsoni
 from .core import process_excel_to_schema
 import json
 import io
-from os import path, walk
 
 web = Blueprint('web', __name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -23,7 +22,7 @@ def upload_file():
     if file.filename == '':
         logger.warning('No selected file')
         return 'No selected file', 400
-    if file and file.filename.endswith(('.xlsx', '.xls')):
+    if file and file.filename.endswith(('.xlsx', '.xls', '.csv')):
         # Process the file and generate the schema
         logger.info(f'\n\n Processing file, stepping into core now : {file.filename}')
         data = process_excel_to_schema(file)

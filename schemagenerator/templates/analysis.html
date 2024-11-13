@@ -7,7 +7,7 @@
     {% if preview %}
         <div class="preview h-full max-h-[250px] overflow-auto border-2 border-lime-700 p-2">
             {#{preview}#}<br>
-            {{analysis.info}}<br>
+            {#{analysis.info}#}<br>
         </div>        
     {% endif %}
     <div class="flex flex-col justify-center my-4">
@@ -16,7 +16,7 @@
         <table id="myTable" class="data-table table-auto border-collapse border border-slate-500 stripe hover">
             <thead>
                 <tr>
-                    {% for column in analysis.columns %}
+                    {% for column in analysis.info.keys() %}
                         <th class="p-2 border border-slate-500">{{ column }}</th>
                     {% endfor %}
                 </tr>
@@ -31,6 +31,27 @@
                 {% endfor %}
             </tbody>
             <tfoot></tfoot>
+        </table>
+    </div>
+
+    <div class="flex flex-col justify-center my-4">
+        <h2 class="text-xl font-bold text-center my-4">Schema Information</h2>
+        <table class="schema-table table-auto border-collapse border border-slate-500">
+            <thead>
+                <tr>
+                    <th class="p-2 border border-slate-500">Field Name</th>
+                    <th class="p-2 border border-slate-500">Data Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set schema_info = analysis.schema %}
+                {% for i in range(schema_info.columns | length) %}
+                    <tr>
+                        <td class="p-2 border border-slate-500">{{ schema_info.columns[i] }}</td>
+                        <td class="p-2 border border-slate-500">{{ schema_info.data_types[i] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
     
