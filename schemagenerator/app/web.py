@@ -1,7 +1,7 @@
 import logging
 import json
 from flask import Blueprint, render_template, request, session, send_file, jsonify
-from .core import process_excel_to_schema
+from .core import process_excel_to_schema, sample_tables
 import json
 import io
 
@@ -78,6 +78,17 @@ def analyze_schema():
     except Exception as e:
         print('Error analyzing schema: %s', e)
         return "Internal Server Error", 500
+
+@web.route('/design', methods=['POST', 'GET'])
+def design_schema():
+    logger.info('Loading design page')
+    try:
+        tables = sample_tables()
+        return render_template('design.html', title='design this', tables=tables)
+    except:
+        return 'No tables available', 404
+    # else:
+    # return render_template('index.html', data=tables)
 
 def run_web():
     logger.info("Running web...")

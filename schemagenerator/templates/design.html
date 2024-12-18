@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% set active_page = "Design" %}
+{% block title %}Designer {% endblock %}
+{% block content %}
+<div class="dataView p-4 my-4">
+    {% if tables %}
+        <div class="preview h-full max-h-[250px] overflow-auto border-2 border-lime-700 p-2">
+            {{tables}}<br>
+            {#{analysis.info}#}<br>
+        </div>        
+    {% endif %}
+    <div>You are now rocking with schema designs</div>
+</div>
+<br><br>
+{% endblock %}
