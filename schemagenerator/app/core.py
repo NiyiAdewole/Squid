@@ -28,11 +28,11 @@ def generate_schema(df: pd.DataFrame, column_mapping: Optional[Dict[str, str]] =
     info = desc.to_dict()
     columns = df.columns
     # column_list = columns.to_dict()
-    logger.warning('Running generate_schema for schema of %s \n', df)
+    logger.warning("Running generate_schema for schema of {0} \n".format(df))
     column_list = df.columns.to_list()
     # Check the data types for each column
     data_types = [str(df[col].dtype) for col in df.columns]
-    logger.warning('Columns are %s \n', column_list)
+    logger.warning("Columns are {0} \n:".format(column_list))
     shcema_info = {
         'columns': column_list,
         'data_types': data_types
@@ -53,7 +53,7 @@ def generate_schema(df: pd.DataFrame, column_mapping: Optional[Dict[str, str]] =
     
     return data
 
-def process_excel_to_schema(file: str, column_mapping: Optional[Dict[str, str]] = None) -> str:
+def process_excel_to_df(file: str):
     # Check the file extension from the filename attribute
     if hasattr(file, 'filename'):
         filename = file.filename
@@ -61,14 +61,19 @@ def process_excel_to_schema(file: str, column_mapping: Optional[Dict[str, str]] 
         logger.error('File object does not have a filename attribute.')
         raise ValueError("Invalid file object.")
     
-    logger.warning('Running process_excel_to_schema for  %s', filename)
+    logger.warning("Running process_excel_to_schema for {0}".format(filename))
     if filename.endswith('.csv'):
         df = pd.read_csv(file)
     elif filename.endswith(('.xlsx','.xls')):
         df = read_excel(file)
     else:
-        logger.error('Unsupported file type: %s', filename)
+        logger.error("Unsupported file type: {0}".format(filename))
         raise ValueError("Unsupported file type. Please upload a .csv or .xlsx/.xls file.")
+    # logger.warning('Data Frame Generated as', df)
+    return df
+
+def process_excel_to_schema(file: str, column_mapping: Optional[Dict[str, str]] = None) -> str:
+    df = process_excel_to_df(file)
     data = generate_schema(df, column_mapping)
     logger.warning('\n Schema generation returned')
     return data

@@ -16,7 +16,9 @@ To install CLI module run the following command in the root  directory of the pr
 ### Usage
 To run the CLI schema generator, use the following command:
 schema_generator 'path_to_file'
-
+#### Development
+Start the application: `flask --app app.py --debug run`
+Redis server will automatically start in development mode. For production, ensure Redis is running manually: `redis-server`.
 
 ## Current Features
 - Web User inteface

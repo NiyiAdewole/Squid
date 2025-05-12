@@ -1,7 +1,8 @@
 import logging
 import json
-from flask import Blueprint, render_template, request, session, send_file, jsonify
+from flask import Blueprint, render_template, request, redirect, session, send_file, url_for, flash
 from .core import process_excel_to_schema, sample_tables
+from .models import db, User
 import json
 import io
 
@@ -12,6 +13,26 @@ logger = logging.getLogger(__name__)
 @web.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
+
+@web.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        # Check if the user already exists
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Username already exists. Please choose a different one.')
+            return redirect(url_for('web.register'))
+
+        # Create a new user
+        new_user = User(username=username, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Registration successful! You can now log in.')
+        return redirect(url_for('web.index'))
+    return render_template('register.html')
 
 @web.route('/upload', methods=['POST'])
 def upload_file():
@@ -81,11 +102,22 @@ def analyze_schema():
 
 @web.route('/design', methods=['POST', 'GET'])
 def design_schema():
+
     logger.info('Loading design page')
+    # samples = sample_tables()
     try:
-        tables = sample_tables()
-        return render_template('design.html', title='design this', tables=tables)
-    except:
+        data = session.get('filedata')
+        # data = session.get('filedata')
+        if not data:
+            logger.info('nothing in session', session.get('filedata'))
+            data = sample_tables()
+        else:
+            logger.info('something in session', session.get('filedata'))
+            logger.info('Loaded file data', data)
+            # tables = json.dumps(data, indent=2, sort_keys=True)
+        return render_template('design.html', title='design this', tables=data)
+    except Exception as e:
+        logger.error('Problem loading session filedata', e )
         return 'No tables available', 404
     # else:
     # return render_template('index.html', data=tables)

@@ -10,7 +10,28 @@
             {#{analysis.info}#}<br>
         </div>        
     {% endif %}
-    <div>You are now rocking with schema designs</div>
+    <div>You are now rocking with schema designs. Get data from file here</div>
+    <div>
+        <table id="designTable" class="data-table table-auto border-collapse border border-slate-500 stripe hover">
+            <thead>
+                <tr>
+                    {% for column in tables.schema.columns %}
+                        <th class="p-2 border border-slate-500">{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in tables.records %}
+                    <tr>
+                    {% for prop, value in record.items() %}
+                        <td class="p-2 border border-slate-500" contenteditable="true">{{ value }}</td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
 </div>
 <br><br>
 {% endblock %}
